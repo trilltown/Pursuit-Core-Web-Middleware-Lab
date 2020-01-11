@@ -22,6 +22,16 @@ const isAnimal = (req, res, next) => {
     }
 }
 
+const generateSpread = (req, res, next) => {
+    let output = [];
+    for (let i = req.params.floor; i <= req.params.ceiling; i++) {
+        output.push(i);
+    }
+    let randomPick = Math.floor(Math.random() * (parseInt(req.params.ceiling) - parseInt(req.params.floor) + 1)) + parseInt(req.params.floor);
+    res.json(`randPick: ${randomPick}`);
+    next();
+}
+
 app.get("/animal/:species", isAnimal, (req, res) => {
     // console.log(req.params);
     if (animals.includes(req.params.species)) {
@@ -29,6 +39,11 @@ app.get("/animal/:species", isAnimal, (req, res) => {
     } else {
         res.json({status: "fail", message: false});
     }
+})
+
+app.get("/random/:floor/:ceiling", generateSpread, (req, res) => {
+    let randomPick = Math.floor(Math.random() * (parseInt(req.params.ceiling) - parseInt(req.params.floor) + 1)) + parseInt(req.params.floor);
+    res.json({status: "success", range: [parseInt(req.params.floor), parseInt(req.params.ceiling)], randPick: randomPick});
 })
 
 app.listen(port, () => {
