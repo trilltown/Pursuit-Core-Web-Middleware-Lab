@@ -24,11 +24,11 @@ const isAnimal = (req, res, next) => {
 
 const generateSpread = (req, res, next) => {
     let output = [];
-    for (let i = req.params.floor; i <= req.params.ceiling; i++) {
+    for (let i = parseInt(req.query.floor); i <= parseInt(req.query.ceiling); i++) {
         output.push(i);
     }
-    let randomPick = Math.floor(Math.random() * (parseInt(req.params.ceiling) - parseInt(req.params.floor) + 1)) + parseInt(req.params.floor);
-    res.json(`randPick: ${randomPick}`);
+    let randomPick = Math.floor(Math.random() * (parseInt(req.query.ceiling) - parseInt(req.query.floor) + 1)) + parseInt(req.query.floor);
+    res.json(`randPick: ${parseInt(randomPick)}`);
     next();
 }
 
@@ -41,9 +41,10 @@ app.get("/animal/:species", isAnimal, (req, res) => {
     }
 })
 
-app.get("/random/:floor/:ceiling", generateSpread, (req, res) => {
-    let randomPick = Math.floor(Math.random() * (parseInt(req.params.ceiling) - parseInt(req.params.floor) + 1)) + parseInt(req.params.floor);
-    res.json({status: "success", range: [parseInt(req.params.floor), parseInt(req.params.ceiling)], randPick: randomPick});
+app.get("/random", generateSpread, (req, res) => {
+    let randomPick = Math.floor(Math.random() * (parseInt(req.query.ceiling) - parseInt(req.query.floor) + 1)) + parseInt(req.query.floor);
+    console.log(randomPick)
+    res.json({status: "success", range: [parseInt(req.query.floor), parseInt(req.query.ceiling)], randPick: parseInt(randomPick)});
 })
 
 app.listen(port, () => {
